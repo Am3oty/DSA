@@ -12,7 +12,6 @@ class Node {
         delete Next;
     }
 };
-
 class SingleLinkedList {
     private: Node * Head;
     Node * Last;
@@ -22,17 +21,14 @@ class SingleLinkedList {
             Last = Head;
             Size++;
         }
-
         ~SingleLinkedList() {
             delete Head;
         }
-
     void Append(int x) {
         Last -> Next = new Node(x);
         Last = Last -> Next;
         Size++;
     }
-
     void Display() {
         Node * Current = Head;
         while (Current != nullptr) {
@@ -40,7 +36,6 @@ class SingleLinkedList {
             Current = Current -> Next;
         }
     }
-
     void Insert(int data, int position) {
         if (position < 1) {
             cout << "Invalid position!" << endl;
@@ -50,20 +45,22 @@ class SingleLinkedList {
         Node * newNode = new Node(data);
 
         if (position == 1) {
-            if (Size == 1) {
-                newNode -> Next = Head;
-                Last = newNode -> Next;
-                Head = newNode;
-                return;
-            } else if (Head == NULL) {
-                Head = newNode;
-                Last = newNode;
-                Size++;
-            } else {
-                newNode -> Next = Head;
-                Head = newNode;
-                return;
+            newNode -> Next = Head;
+            Head = newNode;
+            if (Size == 0) {
+                Last = Head;
             }
+            Size++;
+            return;
+        } else if (Head == NULL) {
+            Head = newNode;
+            Last = newNode;
+            Size++;
+        } else {
+            newNode -> Next = Head;
+            Head = newNode;
+            Size++;
+            return;
         }
 
         Node * Current = Head;
@@ -79,6 +76,7 @@ class SingleLinkedList {
 
         newNode -> Next = Current -> Next;
         Current -> Next = newNode;
+        Size++;
 
         if (newNode -> Next == nullptr) {
             Last = newNode;
@@ -86,7 +84,7 @@ class SingleLinkedList {
     }
     int LinearSearch(int ValueToSearch) {
         Node * Current = Head;
-        for (int i = 1; i < Size() + 1; i++) {
+        for (int i = 1; i < Size + 1; i++) {
             if (Current -> data == ValueToSearch)
                 return i;
             else
@@ -96,7 +94,6 @@ class SingleLinkedList {
 
         return -1;
     }
-
     void Sort() {
         bool swapped;
         Node * current;
@@ -122,17 +119,26 @@ class SingleLinkedList {
         } while (swapped);
 
     }
-
     void Delete(int position) {
 
         if (position < 1 || position > Size) {
             cout << "Invalid Position\n";
             return;
-        } else if (position == 1 && Size == 1) {
+        }
+
+        if (position == 1 && Size == 1) {
             Head -> data = NULL;
+            Size--;
             return;
 
+        } else if (position == 1) {
+            Node * temp = Head;
+            Head = Head -> Next;
+            temp -> Next = nullptr; // Important to prevent recursive deletion
+            delete temp;
             Size--;
+            if (Size == 0) Last = nullptr;
+            return;
         } else if (position == Size) { //Delete Last Node
 
             Node * Current = Head;
@@ -145,6 +151,19 @@ class SingleLinkedList {
             Last -> Next = nullptr;
             Size--;
             return;
+        } else {
+
+            Node * Current = Head;
+            for (int i = 1; i < position - 1 && Current != nullptr; ++i) {
+                Current = Current -> Next;
+            }
+
+            Node * Temp = Current -> Next -> Next;
+            Current -> Next -> Next = nullptr;
+            delete Current -> Next;
+            Current -> Next = Temp;
+            Size--;
+
         }
     }
 };
@@ -170,5 +189,12 @@ int main() {
         cout << "We Found Value At Position " << position << endl;
     else
         cout << "Value Not Found" << endl;
+
+    cout << "\Deleting position 3 ...\n";
+    mylist.Delete(3);
+    mylist.Display();
+    cout << "\Deleting Head ...\n";
+    mylist.Delete(1);
+    mylist.Display();
     return 0;
 }
