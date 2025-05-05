@@ -1,44 +1,43 @@
 #include <iostream>
+
 using namespace std;
 
 class Node {
-public:
-    int data;
-    Node* Next;
+    public: int data;
+    Node * Next;
 
-    Node(int value) : data(value), Next(nullptr) {}
+    Node(int value): data(value),
+    Next(nullptr) {}
     ~Node() {
-        delete Next; // Recursively deletes the next node
+        delete Next;
     }
 };
 
 class SingleLinkedList {
-private:
-    Node* Head;
-    Node* Last;
-    int Size=0;
-public:
-    SingleLinkedList(int y) {
-        Head = new Node(y);
-        Last = Head;
-        Size++;
-    }
+    private: Node * Head;
+    Node * Last;
+    int Size = 0;
+    public: SingleLinkedList(int y) {
+            Head = new Node(y);
+            Last = Head;
+            Size++;
+        }
 
-    ~SingleLinkedList() {
-        delete Head; // Deletes all nodes recursively
-    }
+        ~SingleLinkedList() {
+            delete Head;
+        }
 
     void Append(int x) {
-        Last->Next = new Node(x);
-        Last = Last->Next;
+        Last -> Next = new Node(x);
+        Last = Last -> Next;
         Size++;
     }
 
     void Display() {
-        Node* Current = Head;
+        Node * Current = Head;
         while (Current != nullptr) {
-            cout << Current->data << endl;
-            Current = Current->Next;
+            cout << Current -> data << endl;
+            Current = Current -> Next;
         }
     }
 
@@ -48,20 +47,28 @@ public:
             return;
         }
 
-        Node* newNode = new Node(data);
+        Node * newNode = new Node(data);
 
         if (position == 1) {
-            newNode->Next = Head;
-            Head = newNode;
-            if (Last == nullptr) { // List was empty
-                Last = Head;
+            if (Size == 1) {
+                newNode -> Next = Head;
+                Last = newNode -> Next;
+                Head = newNode;
+                return;
+            } else if (Head == NULL) {
+                Head = newNode;
+                Last = newNode;
+                Size++;
+            } else {
+                newNode -> Next = Head;
+                Head = newNode;
+                return;
             }
-            return;
         }
 
-        Node* Current = Head;
+        Node * Current = Head;
         for (int i = 1; i < position - 1 && Current != nullptr; ++i) {
-            Current = Current->Next;
+            Current = Current -> Next;
         }
 
         if (Current == nullptr) {
@@ -70,70 +77,74 @@ public:
             return;
         }
 
-        newNode->Next = Current->Next;
-        Current->Next = newNode;
+        newNode -> Next = Current -> Next;
+        Current -> Next = newNode;
 
-        if (newNode->Next == nullptr) {
+        if (newNode -> Next == nullptr) {
             Last = newNode;
         }
     }
-    int LinearSearch(int ValueToSearch)
-    {
-        Node *Current=Head;
-        for(int i=1;i<Size()+1;i++)
-        {
-            if(Current->data==ValueToSearch)
+    int LinearSearch(int ValueToSearch) {
+        Node * Current = Head;
+        for (int i = 1; i < Size() + 1; i++) {
+            if (Current -> data == ValueToSearch)
                 return i;
             else
-                Current=Current->Next;
+                Current = Current -> Next;
 
         }
 
         return -1;
     }
 
-    void Sort()
-    {
+    void Sort() {
         bool swapped;
-        Node* current;
-        Node* lastSorted = nullptr;
+        Node * current;
+        Node * lastSorted = nullptr;
 
-         do {
-                swapped = false;
-                current = Head;
-                 while (current->Next != lastSorted) {
+        do {
+            swapped = false;
+            current = Head;
+            while (current -> Next != lastSorted) {
 
-                     if (current->data > current->Next->data) {
-                            // Swap the data
-                            int temp = current->data;
-                            current->data = current->Next->data;
-                            current->Next->data = temp;
-                            swapped = true;
-                     }
-                     current = current->Next;
+                if (current -> data > current -> Next -> data) {
+                    // Swap the data
+                    int temp = current -> data;
+                    current -> data = current -> Next -> data;
+                    current -> Next -> data = temp;
+                    swapped = true;
+                }
+                current = current -> Next;
 
-                 }
+            }
 
-                 lastSorted = current;
-            }while (swapped);
+            lastSorted = current;
+        } while (swapped);
 
     }
 
-    void Delete(int position){
+    void Delete(int position) {
 
-        if(position<1 || position > Size)
-        {
-            cout<<"Invalid Position\n";
+        if (position < 1 || position > Size) {
+            cout << "Invalid Position\n";
             return;
-        }
-        else if(position==1&&Size==1)
-        {
-            Head->data=NULL;
+        } else if (position == 1 && Size == 1) {
+            Head -> data = NULL;
             return;
-        }
-        else if(position){
 
+            Size--;
+        } else if (position == Size) { //Delete Last Node
 
+            Node * Current = Head;
+            while (Current -> Next -> Next != nullptr) {
+                Current = Current -> Next;
+            }
+
+            Last = Current;
+            delete Last -> Next;
+            Last -> Next = nullptr;
+            Size--;
+            return;
         }
     }
 };
@@ -155,9 +166,9 @@ int main() {
     mylist.Display();
     cout << "\Searching the list...\n";
     int position = mylist.LinearSearch(29);
-    if(position > 0)
-        cout<< "We Found Value At Position "<<position<<endl;
+    if (position > 0)
+        cout << "We Found Value At Position " << position << endl;
     else
-        cout<<"Value Not Found"<<endl;
+        cout << "Value Not Found" << endl;
     return 0;
 }
