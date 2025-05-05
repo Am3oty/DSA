@@ -3,28 +3,50 @@
 using namespace std;
 
 class Node {
-    public: int data;
+    public:
+
+        int data;
     Node * Next;
 
-    Node(int value): data(value),
-    Next(nullptr) {}
-    ~Node() {
-        delete Next;
+    Node(int value) {
+        data = value;
+        Next = nullptr;
+    }
+
+    Node() {
+        data = NULL;
+        Next = nullptr;
     }
 };
 
 class SingleLinkedList {
-    private: Node * Head;
+    private:
+
+        Node * Head;
     Node * Last;
     int Size = 0;
-    public: SingleLinkedList(int y) {
+    public:
+
+        SingleLinkedList(int y) {
             Head = new Node(y);
             Last = Head;
             Size++;
         }
-        ~SingleLinkedList() {
-            delete Head;
+
+    SingleLinkedList() {
+        Head = nullptr;
+        Last = Head;
+    }
+    ~SingleLinkedList() {
+        Node * current = Head;
+        while (current != nullptr) {
+            Node * temp = current;
+            current = current -> Next;
+            delete temp;
         }
+        Head = nullptr;
+        Last = nullptr;
+    }
 
     void Append(int x) {
         Last -> Next = new Node(x);
@@ -129,7 +151,9 @@ class SingleLinkedList {
         }
 
         if (position == 1 && Size == 1) {
-            Head -> data = NULL;
+            delete Head;
+            Head = nullptr;
+            Last = nullptr;
             Size--;
             return;
 
@@ -206,6 +230,28 @@ class SingleLinkedList {
             current = current -> Next;
         }
     }
+
+    void Reverse() {
+        if (Head == nullptr) {
+            cout << "The List is empty \n";
+            return;
+        }
+
+        SingleLinkedList Temp;
+
+        Node * Current = Head;
+        while (Current != nullptr) {
+            Temp.Insert(Current -> data, 1);
+            Current = Current -> Next;
+        }
+
+        this -> ~SingleLinkedList();
+        Head = Temp.Head;
+        Last = Temp.Last;
+        Size = Temp.Size;
+        Temp.Head = nullptr;
+        Temp.Last = nullptr;
+    }
 };
 
 int main() {
@@ -220,37 +266,40 @@ int main() {
     mylist.Append(5);
     mylist.Display();
 
-    cout << "\nInserting 29 at position 2...\n";
+    cout << "\n Inserting 29 at position 2...\n";
     mylist.Insert(29, 2);
     mylist.Display();
-    cout << "\Checking if the list is sorted...\n";
+    cout << "\n Checking if the list is sorted...\n";
     if (mylist.IsSorted())
         cout << "List is Sorted\n";
     else
         cout << "List is not sorted\n";
-    cout << "\Sorting the list...\n";
+    cout << "\n Sorting the list...\n";
     mylist.Sort();
     mylist.Display();
-    cout << "\Checking if the list is sorted...\n";
+    cout << "\n Checking if the list is sorted...\n";
     if (mylist.IsSorted())
-        cout << "List is Sorted\n";
+        cout << "\n List is Sorted\n";
     else
-        cout << "List is not sorted\n";
-    cout << "\Searching the list...\n";
+        cout << "\n List is not sorted\n";
+    cout << "\n Searching the list...\n";
     int position = mylist.LinearSearch(29);
     if (position > 0)
-        cout << "We Found Value At Position " << position << endl;
+        cout << "\n We Found Value At Position " << position << endl;
     else
-        cout << "Value Not Found" << endl;
+        cout << "\n Value Not Found" << endl;
 
-    cout << "\Deleting position 3 ...\n";
+    cout << "\n Deleting position 3 ...\n";
     mylist.Delete(3);
     mylist.Display();
-    cout << "\Deleting Head ...\n";
+    cout << "\n Deleting Head ...\n";
     mylist.Delete(1);
     mylist.Display();
-    cout << "\Removing Duplication ...\n";
+    cout << "\n Removing Duplication ...\n";
     mylist.RemoveDuplicate();
+    mylist.Display();
+    cout << "\n Reversing List ...\n";
+    mylist.Reverse();
     mylist.Display();
     return 0;
 }
