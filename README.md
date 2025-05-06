@@ -1,0 +1,20 @@
+<h1>DSA</h1>
+<ol>
+  <li>
+    <h2>Linked List</h2>
+    <br/>
+    <h3>Functions</h3>
+    <ul>
+      <li>Append</li>
+      <li>Insert</li>
+      <li>Sort</li>
+      <li>IsSorted</li>
+      <li>Delete</li>
+      <li>Display</li>
+      <li>LinearSearch</li>
+      <li>RemoveDuplicate</li>
+      <li>Reverse</li>
+      <li>Concatenate</li>
+    </ul>
+  </li>
+</ol>
