@@ -49,8 +49,13 @@ class SingleLinkedList {
     }
 
     void Append(int x) {
-        Last -> Next = new Node(x);
-        Last = Last -> Next;
+        if (Head == nullptr) {
+            Head = new Node(x);
+            Last = Head;
+        } else {
+            Last -> Next = new Node(x);
+            Last = Last -> Next;
+        }
         Size++;
     }
 
@@ -236,21 +241,23 @@ class SingleLinkedList {
             cout << "The List is empty \n";
             return;
         }
-
-        SingleLinkedList Temp;
-
         Node * Current = Head;
+        Node * prev = nullptr;
+        Node * next = nullptr;
+        Last = Head;
         while (Current != nullptr) {
-            Temp.Insert(Current -> data, 1);
-            Current = Current -> Next;
+            next = Current -> Next;
+            Current -> Next = prev;
+            prev = Current;
+            Current = next;
         }
+        Head = prev;
+    }
 
-        this -> ~SingleLinkedList();
-        Head = Temp.Head;
-        Last = Temp.Last;
-        Size = Temp.Size;
-        Temp.Head = nullptr;
-        Temp.Last = nullptr;
+    void Concatenate(SingleLinkedList * List) {
+        Last -> Next = List -> Head;
+        Last = List -> Last;
+        Size += List -> Size;
     }
 };
 
@@ -300,6 +307,14 @@ int main() {
     mylist.Display();
     cout << "\n Reversing List ...\n";
     mylist.Reverse();
+    mylist.Display();
+    cout << "\n Concatenating List ...\n";
+    SingleLinkedList * L2 = new SingleLinkedList(1);
+    L2 -> Append(5);
+    L2 -> Append(8);
+    L2 -> Append(10);
+    L2 -> Append(25);
+    mylist.Concatenate(L2);
     mylist.Display();
     return 0;
 }
