@@ -6,16 +6,19 @@ class Node {
     public:
 
         int data;
-    Node * Next;
+        Node * Next;
+        Node * Prev;
 
     Node(int value) {
         data = value;
         Next = nullptr;
+        Prev = nullptr;
     }
 
     Node() {
         data = NULL;
         Next = nullptr;
+        Prev = nullptr;
     }
 };
 
@@ -23,8 +26,8 @@ class SingleLinkedList {
     private:
 
         Node * Head;
-    Node * Last;
-    int Size = 0;
+        Node * Last;
+        int Size = 0;
     public:
 
         SingleLinkedList(int y) {
@@ -259,8 +262,57 @@ class SingleLinkedList {
         Last = List -> Last;
         Size += List -> Size;
     }
+
 };
 
+class DoubleLinkedList{
+
+    private:
+
+        Node * Head;
+        Node * Last;
+        int Size = 0;
+
+    public:
+
+        DoubleLinkedList(int y) {
+            Head = new Node(y);
+            Head->Next=Head;
+            Head->Prev=Head;
+            Last = Head;
+            Size++;
+        }
+
+        DoubleLinkedList() {
+        Head = nullptr;
+        Last = nullptr;
+        }
+
+        ~DoubleLinkedList() {
+
+            Node * current = Head;
+            while (current != nullptr) {
+                Node * temp = current;
+                current = current -> Next;
+                delete temp;
+            }
+            Head = nullptr;
+            Last = nullptr;
+        }
+
+        void Append(int x) {
+        if (Head == nullptr) {
+            Head = new Node(x);
+            Head->Next=Head;
+            Head->Prev=Head;
+            Last = Head;
+        } else {
+            Last -> Next = new Node(x);
+            Last = Last -> Next;
+        }
+        Size++;
+    }
+};
 int main() {
     SingleLinkedList mylist(100);
     mylist.Append(20);
